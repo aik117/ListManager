@@ -1,6 +1,7 @@
 package com.example.hv.listmanager;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,10 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button makeLists;
     private Button viewLists;
+
+    ArrayList<String> itemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +31,15 @@ public class MainActivity extends AppCompatActivity {
                 createListDialog();
             }
         });
+
         viewLists = (Button) findViewById(R.id.vl);
+        viewLists.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ListViewActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void createListDialog() {
@@ -42,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 //do something with edt.getText().toString();
+                //itemList.add(edt.getText().toString());
+                DBHelper helper = new DBHelper(MainActivity.this);
+                helper.insertList(edt.getText().toString());
+
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
